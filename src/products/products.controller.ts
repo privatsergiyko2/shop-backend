@@ -18,30 +18,20 @@ export class ProductsController {
   constructor(
     @InjectModel(Product.name)
     private readonly productModel: Model<Product>,
-
-    @InjectModel(Counter.name)
-    private readonly counterModel: Model<Counter>,
   ) {}
 
   @Get()
   async getProducts() {
-    const response = await fetch('https://dummyjson.com/products');
-    const data = await response.json();
-    return data;
+    return {
+      products: await this.productModel.find(),
+    };
   }
 
   @Get(':id')
   async getProductById(@Param('id') id: string) {
-    const mongoProduct = await this.productModel.findOne({
-      id: Number(id),
+    return await this.productModel.findOne({
+      _id: id,
     });
-  if(mongoProduct) {
-    return mongoProduct;
-  }
-    const response = await fetch(`https://dummyjson.com/products/${id}`);
-    const data = await response.json();
-    console.log(data);
-    return data;
   }
 
   @Delete(':id')
@@ -66,16 +56,6 @@ export class ProductsController {
 
   @Post('add')
   async addProduct(@Body() body: any) {
-    const counterInc = await this.counterModel.findOneAndUpdate(
-      { name: 'productId' },
-      { $inc: { seq: 1 } },
-      { upsert: true, new: true },
-    );
-    if (!counterInc) {
-      throw new Error('Не вдалося отримати лічильник');
-    }
-    body.id = 999999 + counterInc.seq;
-    const product = await this.productModel.create(body);
-    return product;
+    return await this.productModel.create(body);
   }
 }
