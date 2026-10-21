@@ -4,12 +4,33 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ProductsController } from './products/products.controller';
 
+import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+import { Product, ProductSchema } from './schemas/product.schema';
+import { Counter, CounterSchema } from './schemas/counter.schema';
+
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
 @Module({
   imports: [
-    // Distributed tracing, auto-correlated logs, request/job metrics, error
-    // telemetry, alarms, and more — out of the box. Sign up at https://observe.nestjs.com
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.getOrThrow<string>('MONGO_URI'),
+      }),
+    }),
+
+    MongooseModule.forFeature([
+      { name: Product.name, schema: ProductSchema },
+      { name: Counter.name, schema: CounterSchema },
+    ]),
+
     ObserveModule.forRoot({
       appKey: 'YOUR_APP_KEY',
       appSecret: 'YOUR_APP_SECRET',
