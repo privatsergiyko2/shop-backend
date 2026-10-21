@@ -57,14 +57,17 @@ export const ProductMetaSchema = SchemaFactory.createForClass(ProductMeta);
 
 @Schema({ timestamps: true })
 export class Product {
-  @Prop({ type: Number, unique: true, sparse: true })
-  id?: number;
-
   @Prop({ type: String, required: true })
   title: string;
 
   @Prop({ type: String, required: true })
+  test: string;
+
+  @Prop({ type: String, required: true })
   description: string;
+
+  @Prop({ type: Boolean, required: false, default: false })
+  favorite: boolean;
 
   @Prop({ type: String, required: true })
   category: string;
@@ -122,9 +125,6 @@ export class Product {
 
   @Prop({ type: ProductMetaSchema })
   meta?: ProductMeta;
-
-  createdAt?: Date;
-  updatedAt?: Date;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

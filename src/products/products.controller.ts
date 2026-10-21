@@ -34,28 +34,28 @@ export class ProductsController {
     });
   }
 
-  @Delete(':id')
-  async deleteProduct(@Param('id') id: string) {
-    const response = await fetch(`https://dummyjson.com/products/${id}`, {
-      method: 'DELETE',
-    });
-    const data = await response.json();
-    return data;
-  }
-
   @Patch(':id')
-  async updateProduct(@Param('id') id: string, @Body() body: any) {
-    const response = await fetch(`https://dummyjson.com/products/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
+  async updateProduct(@Param('id') id: string, @Body() body: Partial<Product>) {
+    const productUpdate = await this.productModel.findByIdAndUpdate(id, body, {
+      new: true,
     });
-    const data = await response.json();
-    return data;
+    if (!productUpdate) {
+      throw new NotFoundException('Product not found');
+    }
+    return productUpdate;
   }
 
   @Post('add')
   async addProduct(@Body() body: any) {
     return await this.productModel.create(body);
+  }
+
+  @Delete(':id')
+  async deleteProduct(@Param('id') id: string) {
+    const deleteProd = await this.productModel.findByIdAndDelete(id);
+    if (!deleteProd) {
+      throw new NotFoundException();
+    }
+    return deleteProd;
   }
 }
