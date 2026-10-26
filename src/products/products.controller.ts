@@ -7,9 +7,10 @@ import {
   Body,
   Post,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model} from 'mongoose';
 import { Product } from '../schemas/product.schema';
 import { Counter } from '../schemas/counter.schema';
 
@@ -21,9 +22,15 @@ export class ProductsController {
   ) {}
 
   @Get()
-  async getProducts() {
+  async getProducts(@Query('favorites') favorites: number) {
+    const filter: any = {}
+    if (Number(favorites)) {
+      filter['favorite'] = !!favorites;
+    }
     return {
-      products: await this.productModel.find(),
+      products: await this.productModel.find(
+        filter
+      ),
     };
   }
 
@@ -33,6 +40,8 @@ export class ProductsController {
       _id: id,
     });
   }
+
+
 
   @Patch(':id')
   async updateProduct(@Param('id') id: string, @Body() body: Partial<Product>) {
@@ -49,6 +58,9 @@ export class ProductsController {
   async addProduct(@Body() body: any) {
     return await this.productModel.create(body);
   }
+
+
+
 
   @Delete(':id')
   async deleteProduct(@Param('id') id: string) {

@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { Product, ProductSchema } from './schemas/product.schema';
 import { Counter, CounterSchema } from './schemas/counter.schema';
+import { AuthModule } from './auth/auth.module';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -36,6 +37,8 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       appSecret: 'YOUR_APP_SECRET',
       serviceId: 'shop-backend',
     }),
+
+    AuthModule,
   ],
   controllers: [AppController, ProductsController],
   providers: [AppService],
