@@ -52,10 +52,25 @@ export class CartService {
     return await cart.save();
   }
 
+  async removeSelected(userId: string, productIds: string[]) {
+    const cart = await this.cartModel.findOneAndUpdate(
+      { userId: userId },
+      {
+        $pull: {
+          items: {
+            productId: { $in: productIds }
+          }
+        }
+      },
+      { new: true }
+    );
+
+    return cart;
+  }
+
   async clearCart(userId: string) {
     const cart = await this.getCart(userId);
     cart.items = [];
     return await cart.save();
-
   }
 }

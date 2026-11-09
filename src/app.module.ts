@@ -11,6 +11,8 @@ import { Product, ProductSchema } from './schemas/product.schema';
 import { Counter, CounterSchema } from './schemas/counter.schema';
 import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
+import { OrdersModule } from './orders/orders.module';
+import { PaymentsModule } from './payments/payments.module';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -42,6 +44,10 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     AuthModule,
 
     CartModule,
+
+    OrdersModule,
+
+    PaymentsModule,
   ],
   controllers: [AppController, ProductsController],
   providers: [AppService],

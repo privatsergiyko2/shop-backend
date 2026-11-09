@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { CartService } from './cart.service';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth/jwt-auth.guard';
@@ -28,6 +36,16 @@ export class CartController {
     return this.cartService.addToCart(userId, productId);
   }
 
+  @Delete('items/selected')
+  @UseGuards(JwtAuthGuard)
+  removeSelected(
+    @Req() request: Request & { user: { userId: string } },
+    @Body('productIds') productIds: string[]
+  ) {
+    const userId = request.user.userId;
+    return this.cartService.removeSelected(userId, productIds);
+  }
+
   @Delete('items/:productId')
   @UseGuards(JwtAuthGuard)
   removeFromCart(
@@ -40,7 +58,10 @@ export class CartController {
 
   @Patch('items/:productId')
   @UseGuards(JwtAuthGuard)
-  decreaseProduct(@Req() request: Request & { user: { userId: string } }, @Param('productId') productId: string) {
+  decreaseProduct(
+    @Req() request: Request & { user: { userId: string } },
+    @Param('productId') productId: string,
+  ) {
     const userId = request.user.userId;
     return this.cartService.decreaseQuantity(userId, productId);
   }
