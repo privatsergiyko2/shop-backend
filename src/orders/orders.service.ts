@@ -80,16 +80,16 @@ export class OrdersService {
       throw new NotFoundException('Order not found');
     }
 
-    if(order.userId !== userId) {
+    if (order.userId !== userId) {
       throw new ForbiddenException('Access denied');
     }
 
     return {
-      paymentStatus: order.paymentStatus
+      paymentStatus: order.paymentStatus,
     };
   }
 
   async findMyOrders(userId: string) {
-   return this.orderModel.find({userId: userId}).sort({createdAt: -1})
+    return this.orderModel.find({ userId: userId }).sort({ createdAt: -1 });
   }
 }

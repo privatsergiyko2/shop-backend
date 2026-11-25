@@ -11,7 +11,10 @@ export class User {
   @Prop({ required: true})
   password: string;
 
-  @Prop({ type: Number, default: 1 })
+  @Prop()
+  phone?: string;
+
+  @Prop({ type: Number, default: 0 })
   role: number;
 }
 

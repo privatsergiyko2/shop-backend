@@ -13,6 +13,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model} from 'mongoose';
 import { Product } from '../schemas/product.schema';
 import { Counter } from '../schemas/counter.schema';
+import {UseGuards} from '@nestjs/common';
+import {JwtAuthGuard} from '../auth/jwt-auth/jwt-auth.guard';
+import {AdminGuard} from '../auth/admin/admin.guard';
 
 @Controller('products')
 export class ProductsController {
@@ -44,6 +47,7 @@ export class ProductsController {
 
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async updateProduct(@Param('id') id: string, @Body() body: Partial<Product>) {
     const productUpdate = await this.productModel.findByIdAndUpdate(id, body, {
       new: true,
@@ -55,6 +59,7 @@ export class ProductsController {
   }
 
   @Post('add')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async addProduct(@Body() body: any) {
     return await this.productModel.create(body);
   }
@@ -63,6 +68,7 @@ export class ProductsController {
 
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   async deleteProduct(@Param('id') id: string) {
     const deleteProd = await this.productModel.findByIdAndDelete(id);
     if (!deleteProd) {

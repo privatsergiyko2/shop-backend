@@ -60,8 +60,8 @@ export class Product {
   @Prop({ type: String, required: true })
   title: string;
 
-  @Prop({ type: String, required: true })
-  test: string;
+  // @Prop({ type: String, required: true })
+  // test: string;
 
   @Prop({ type: String, required: true })
   description: string;

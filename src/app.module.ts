@@ -13,6 +13,9 @@ import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
 import { PaymentsModule } from './payments/payments.module';
+import { UsersModule } from './users/users.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -48,6 +51,12 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     OrdersModule,
 
     PaymentsModule,
+
+    UsersModule,
+
+    ReviewsModule,
+
+    FavoritesModule,
   ],
   controllers: [AppController, ProductsController],
   providers: [AppService],
